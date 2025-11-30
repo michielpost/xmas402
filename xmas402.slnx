@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Website/">
+    <Project Path="xmas402/Client/xmas402.Client.csproj" />
+    <Project Path="xmas402/Server/xmas402.Server.csproj" />
+    <Project Path="xmas402/Shared/xmas402.Shared.csproj" />
+  </Folder>
+  <Project Path="xmas402.Database/xmas402.Database.csproj" />
+  <Project Path="xmas402.Services/xmas402.Services.csproj" />
+</Solution>

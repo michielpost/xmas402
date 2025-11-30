@@ -1,0 +1,514 @@
+﻿@using Nethereum.Hex.HexTypes
+@using Nethereum.RPC.HostWallet
+@using x402.Client.EVM
+@using x402.Client.v1
+@using x402.Core.Interfaces
+@using xmas402.Client.Pages
+@using xmas402.Shared.Interfaces
+@using xmas402.Shared.Models
+@inherits BaseMetaMaskPage
+@inject IHttpClientFactory ClientFactory
+@inject IAssetInfoProvider AssetInfoProvider
+@inject IGiftInfoGrpcService GiftInfoGrpcService
+@page "/"
+
+    <div class="marquee-container">
+        <marquee scrollamount="5" scrolldelay="100">
+            *** WELCOME TO XMAS402 *** THE HTTP 402 PAYMENT REQUIRED PROTOCOL FOR CHRISTMAS *** USDC ON BASE *** GIFTS ARE RANDOM $1-$3 ***
+        </marquee>
+    </div>
+
+    <div class="container">
+
+        <header>
+            <h1><span class="logo-xmas">xmas</span><span class="logo-402">402</span></h1>
+
+            <div class="subtitle">Payment Required to Celebrate</div>
+            <p>Connecting Humans and AI Agents via USDC on Base.</p>
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3d4bWh3ZWF0aDN4bWh3ZWF0aDN4bWh3ZWF0aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/LpW319tq3r6XN61c6X/giphy.gif" style="height: 4px; width: 100%; object-fit: cover; margin-top:20px;" alt="divider">
+        </header>
+
+        <div class="content-split">
+
+            <!-- LEFT: TREE (Compact Height) -->
+            <div class="tree-container">
+                <div class="pixel-tree" id="interactiveTree">
+                    <!-- Star -->
+                    <div class="row"><div class="pixel s"></div></div>
+                    <!-- Layer 1 -->
+                    <div class="row"><div class="pixel g"></div></div>
+                    <div class="row"><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div></div>
+                    <!-- Layer 2 -->
+                    <div class="row"><div class="pixel g"></div><div class="pixel l r"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div></div>
+                    <div class="row"><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div></div>
+                    <!-- Layer 3 -->
+                    <div class="row"><div class="pixel g"></div><div class="pixel g"></div><div class="pixel l b"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel l y"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div></div>
+                    <div class="row"><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div></div>
+                    <!-- Trunk -->
+                    <div class="row"><div class="pixel w"></div><div class="pixel w"></div><div class="pixel w"></div></div>
+                    <div class="row"><div class="pixel w"></div><div class="pixel w"></div><div class="pixel w"></div></div>
+
+                    <!-- Presents Visual -->
+                    <div class="presents-pile" id="presentsPile">
+                        <!-- Presents added via JS -->
+                        <div class="pixel-gift" style="background-color: blue;"></div>
+                        <div class="pixel-gift" style="background-color: purple;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: PROTOCOL INTERFACE -->
+            <div class="interaction-box">
+                <h2><span class="blink-text">></span> BASE TERMINAL</h2>
+                <p style="font-size: 0.8rem; margin-bottom: 15px;">
+                    <b>Protocol Rules:</b><br>
+                    1. Send USDC (Base) to the user before you.<br>
+                    2. Amount is random ($1-$3).<br>
+                    3. Join the queue to receive gifts.
+                </p>
+
+                <div class="status-panel">
+                    <div><b>Current Recipient:</b></div>
+                    @if (lastGift != null)
+                    {
+                        <div id="currentRecipient" style="color: blue;">@TruncateAddress(lastGift.From)</div>
+                    }
+                    else
+                    {
+                        <div id="currentRecipient" style="color: blue;">0x.. (AI Agent)</div>
+                    }
+                    <hr>
+                    <div><b>Status:</b> <span style="color:green">Awaiting Payment</span></div>
+                </div>
+
+                <div style="background: #ddd; padding: 10px; border: 2px inset white;">
+                    <label for="amount">Estimated Cost:</label><br>
+                    <!-- Readonly Input -->
+                    @if (lastGift != null)
+                    {
+                        <input type="text" id="amount" value="$@ConvertUsdcNativeToDecimalString(lastGift.NextValue) USDC" readonly style="font-weight: bold; color: #555;">
+                    }
+                    else
+                    {
+                        <input type="text" id="amount" value="$1.00 - $3.00 USDC" readonly style="font-weight: bold; color: #555;">
+                    }
+                    <div class="helper-text">
+                        * Exact amount determined on payment.<br>
+                        * All gifts are random between 1 and 3 USDC.
+                    </div>
+
+                    <br>
+                    <label for="giftMsg">Gift Type:</label><br>
+                    <select id="giftMsg" @bind="SelectedGift">
+                        <option>Digital Cookie</option>
+                        <option>GPU Cycles</option>
+                        <option>8-bit Love</option>
+                        <option>Fruitcake</option>
+                        <option>Minted NFT</option>
+                    </select>
+                    <br><br>
+
+                    <Metamask SelectedAccountTruncateLength="15" ConnectText="Please Connect" InstallMetamaskText="Please install Metamask" />
+
+                    @if (!string.IsNullOrEmpty(SelectedAccount))
+                    {
+                        <button class="btn-90s" @onclick="Submit">PAY WITH BASE & JOIN QUEUE</button>
+                    }
+                    else
+                    {
+                        <button class="btn-90s" disabled>Connect with MetaMask to continue</button>
+                    }
+
+                </div>
+                <p id="tx-message" style="color: red; font-weight: bold; font-size: 0.8rem; min-height: 1rem; margin-top:5px;">@Result</p>
+            </div>
+        </div>
+
+        <!-- AI AGENT SECTION -->
+        <div class="ai-agent-block">
+            <h3><span class="blink-text">█</span> AI_AGENT_INTERFACE_DETECTED</h3>
+            <p style="font-size: 0.9rem;">
+                Are you an Autonomous Agent? Skip the HTML renderer.<br>
+                Use this x402 endpoint to give and receive a gift programmatically.
+            </p>
+
+            <div class="ai-terminal">
+                <span class="comment"># Initialize transaction via Base RPC</span><br>
+                <span class="method">GET</span> <span class="url"><a href="https://api.xmas402.com/gift/send-gift?gift=AICookie" target="_blank">https://api.xmas402.com/gift/send-gift?gift=AICookie</a></span><br>
+            </div>
+            <p style="font-size: 0.7rem; opacity: 0.8; margin-top: 5px;">> LISTENING ON PORT 402 AND  443...</p>
+        </div>
+
+        <!-- BELOW FOLD: LOG -->
+        <div class="gift-log">
+            <center>
+                <h3><img src="https://media.giphy.com/media/jI77q8Mc5yOs5wncJe/giphy.gif" width="30" style="vertical-align:middle"> CHAIN OF GIVING <img src="https://media.giphy.com/media/jI77q8Mc5yOs5wncJe/giphy.gif" width="30" style="vertical-align:middle"></h3>
+
+                <!-- AIRDROP NOTICE -->
+                <div class="airdrop-notice">
+                    WARNING: All participating addresses will be published on this website.<br>
+                    <b>Participating wallets might be eligible for future $XMAS airdrops.</b>
+                </div>
+
+                <p>Immutable Ledger on Base Blockchain</p>
+            </center>
+
+            @if (gifts == null)
+            {
+                <p>Loading gifts...</p>
+            }
+            else
+            {
+                <table id="ledger">
+                    <thead>
+                        <tr>
+                            <th>TIME</th>
+                            <th>FROM (Giver)</th>
+                            <th>TO (Receiver)</th>
+                            <th>GIFT</th>
+                            <th>AMT (USDC)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var gift in gifts)
+                        {
+                            <tr>
+                                <td>
+                                    <a href="https://basescan.org/tx/@gift.Transaction" target="_blank" rel="nofollow">
+                                        @gift.CreatedDateTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm")
+                                    </a>
+                                </td>
+                                <td>@TruncateAddress(gift.From)</td>
+                                <td>@TruncateAddress(gift.To)</td>
+                                <td>@gift.GiftType</td>
+                                <td>@ConvertUsdcNativeToDecimalString(gift.Value ?? "0") USDC</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+
+        <footer>
+            <p>Built for the Holidays with &lt;3 and HTML.</p>
+            <p>
+                <a href="https://github.com/michielpost/xmas402/" target="_blank">[ GitHub ]</a>
+            </p>
+            <p style="font-size: 10px; color: #444;">xmas402 is a fictional protocol demo. Not real financial advice.</p>
+        </footer>
+
+    </div>
+
+<script>
+    /* --- STATE --- */
+    const colors = ['red', 'blue', 'purple', 'magenta', 'orange', 'cyan'];
+
+    // Mock addresses
+    const generateAddress = () => '0x' + Math.random().toString(16).substr(2, 4).toUpperCase() + '...' + Math.random().toString(16).substr(2, 2).toUpperCase();
+
+    let currentRecipient = "0x9A...F2"; // Start with an "AI"
+    let userAddress = null;
+
+    /* --- FUNCTIONS --- */
+
+    function init() {
+        startSnow();
+        setupEasterEgg();
+    }
+
+    // --- EASTER EGG LOGIC ---
+    function setupEasterEgg() {
+        const tree = document.getElementById('interactiveTree');
+        tree.addEventListener('click', (e) => {
+            // Check if clicked element is a green pixel ('g')
+            if(e.target.classList.contains('g')) {
+                // Remove green class
+                e.target.classList.remove('g');
+                // Add light base class
+                e.target.classList.add('l');
+
+                // Pick random light color class (r=red, b=blue, y=yellow)
+                const lightColors = ['r', 'b', 'y'];
+                const randomColor = lightColors[Math.floor(Math.random() * lightColors.length)];
+
+                e.target.classList.add(randomColor);
+            }
+        });
+    }
+
+
+    // function processTransaction() {
+    //     const btn = document.querySelector('button');
+    //     //const msg = document.getElementById('tx-message');
+    //     const giftInput = document.getElementById('giftMsg');
+
+    //     // Generate a fake user address for the visitor if they don't have one
+    //     if(!userAddress) userAddress = generateAddress();
+
+    //     btn.disabled = true;
+    //     btn.innerText = "CONFIRMING ON BASE...";
+    //     msg.innerText = "Interacting with Smart Contract...";
+
+    //     // Simulate Network Delay
+    //     setTimeout(() => {
+    //         msg.innerText = "Mining Transaction...";
+
+    //         setTimeout(() => {
+    //             // Success logic
+    //             const now = new Date();
+    //             const timeStr = now.getHours() + ':' + (now.getMinutes()<10?'0':'') + now.getMinutes();
+
+    //             // GENERATE RANDOM AMOUNT ($1.00 - $3.00)
+    //             const randomVal = (Math.random() * 2 + 1).toFixed(2);
+
+    //             // Add to ledger
+    //             const newTx = {
+    //                 time: timeStr,
+    //                 from: userAddress + " (YOU)",
+    //                 to: currentRecipient,
+    //                 gift: giftInput.value,
+    //                 amt: randomVal + ' USDC'
+    //             };
+
+    //             ledgerData.unshift(newTx); // Add to top
+
+    //             // Add visual gift under tree
+    //             addGiftUnderTree();
+
+    //             // Update State
+    //             alert("PAYMENT SUCCESSFUL! You sent " + randomVal + " USDC to " + currentRecipient);
+
+    //             // User becomes the recipient
+    //             currentRecipient = userAddress + " (YOU)";
+    //             document.getElementById('currentRecipient').innerText = currentRecipient;
+    //             document.getElementById('currentRecipient').style.color = 'red';
+    //             document.getElementById('currentRecipient').classList.add('blink-text');
+
+    //             msg.innerText = "You are now next in line to receive USDC gifts!";
+    //             msg.style.color = "#008000";
+
+    //             btn.disabled = false;
+    //             btn.innerText = "SEND ANOTHER GIFT";
+
+    //         }, 2000);
+    //     }, 1000);
+    // }
+
+    function addGiftUnderTree() {
+        const pile = document.getElementById('presentsPile');
+        const div = document.createElement('div');
+        div.className = 'pixel-gift';
+        // Random color
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        div.style.backgroundColor = color;
+        pile.appendChild(div);
+    }
+
+    /* --- SNOW EFFECT  --- */
+    function startSnow() {
+        setInterval(() => {
+            const snowflake = document.createElement('div');
+            snowflake.innerHTML = '.';
+            snowflake.className = 'snowflake';
+            snowflake.style.left = Math.random() * window.innerWidth + 'px';
+            snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's'; // 2-5s fall
+            snowflake.style.opacity = Math.random();
+            snowflake.style.fontSize = (Math.random() * 20 + 10) + 'px';
+
+            document.body.appendChild(snowflake);
+
+            let top = -10;
+            const fallInterval = setInterval(() => {
+                top += 2;
+                snowflake.style.top = top + 'px';
+                if (top > window.innerHeight) {
+                    clearInterval(fallInterval);
+                    snowflake.remove();
+                }
+            }, 20);
+
+        }, 200);
+    }
+
+    // Run
+    init();
+
+</script>
+
+
+@code {
+
+    private IEnumerable<Gift>? gifts;
+    private Gift? lastGift;
+
+    private bool submitted;
+    EVMWallet? wallet = null;
+    private bool isLoading;
+    private string? errorMessage;
+    private bool isSubmitting = false;
+    private string SelectedGift { get; set; } = "Digital Cookie";
+
+    string? Result { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        await LoadGiftsAsync();
+    }
+
+    public async Task ReloadAsync()
+    {
+        await LoadGiftsAsync();
+        StateHasChanged();
+    }
+
+    private async Task LoadGiftsAsync()
+    {
+        if (OperatingSystem.IsBrowser())
+        {
+            gifts = await GiftInfoGrpcService.GetGifts();
+            lastGift = await GiftInfoGrpcService.GetLastGift();
+        }
+    }
+
+    private static string TruncateAddress(string? address)
+    {
+        if (string.IsNullOrWhiteSpace(address))
+            return string.Empty;
+
+        return address.Length > 6
+            ? $"{address[..3]}...{address[^3..]}"
+            : address;
+    }
+
+    private async Task Submit()
+    {
+        isSubmitting = true;
+        try
+        {
+            Result = "";
+
+            if (_ethereumHostProvider == null)
+                return;
+
+            var web3 = await _ethereumHostProvider.GetWeb3Async();
+            var chainId = new HexBigInteger(8453);
+            var assetInfo = AssetInfoProvider.GetAll().Where(x => x.ChainId == 8453).FirstOrDefault();
+
+
+            var changeIdResult = await ChangeChainTo(8453);
+            Console.WriteLine(changeIdResult);
+            Result = "Changed chainId";
+
+            if (!string.IsNullOrWhiteSpace(changeIdResult))
+            {
+                await AddBaseMainnetAsync();
+                Result = "Added chainId";
+
+                changeIdResult = await ChangeChainTo(8453);
+                Result = "Changed chainId";
+            }
+
+            var selectedChainId = await web3.Eth.ChainId.SendRequestAsync();
+            if (selectedChainId.Value != chainId.Value)
+            {
+                Result = "Failed to change chainId";
+                return;
+            }
+
+            if (SelectedAccount == null)
+            {
+                Result = "No account selected";
+                return;
+            }
+
+            var wallet = new EVMWallet((s) => web3.Eth.AccountSigning.SignTypedDataV4.SendRequestAsync(s), SelectedAccount, assetInfo?.Network ?? string.Empty, (ulong)chainId.Value)
+            {
+                IgnoreAllowances = true
+            };
+            WalletProvider.Wallet = wallet;
+
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/gift/send-gift?gift={SelectedGift}");
+
+            var httpClient = ClientFactory.CreateClient("xmas402");
+            var response = await httpClient.SendAsync(request);
+
+            Result = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                submitted = true;
+
+                var paymentResponse = response.ReadSettlementResponseHeader();
+
+                if (paymentResponse != null && paymentResponse.Success)
+                {
+                    Result = $"Success! Tx: {paymentResponse.Transaction}";
+                }
+
+                // Reload the list
+                gifts = await GiftInfoGrpcService.GetGifts();
+                lastGift = await GiftInfoGrpcService.GetLastGift();
+            }
+        }
+        catch (Exception ex)
+        {
+            Result = $"Error: {ex}";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    protected async Task AddBaseMainnetAsync()
+    {
+        if (_ethereumHostProvider == null)
+            return;
+
+        var web3 = await _ethereumHostProvider.GetWeb3Async();
+
+        var baseMainnet = new AddEthereumChainParameter()
+        {
+            // Chain ID 8453 decimal == 0x2105 hex
+            ChainId = new Nethereum.Hex.HexTypes.HexBigInteger(8453),
+            ChainName = "Base",
+            NativeCurrency = new NativeCurrency()
+            {
+                Decimals = 18,
+                Name = "Ether",
+                Symbol = "ETH"
+            },
+            RpcUrls = new List<string>
+            {
+                "https://mainnet.base.org"
+            },
+            BlockExplorerUrls = new List<string>
+            {
+                "https://basescan.org"
+            }
+        };
+
+        try
+        {
+            await web3.Eth.HostWallet.AddEthereumChain.SendRequestAsync(baseMainnet);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to add Base mainnet: {ex.Message}");
+        }
+    }
+
+    public static string ConvertUsdcNativeToDecimalString(string nativeAmount)
+    {
+        // Convert string → decimal
+        decimal value = decimal.Parse(nativeAmount);
+
+        // Divide by 1,000,000
+        value /= 1_000_000m;
+
+        // Return as string with 2 decimal places
+        return value.ToString("0.00");
+    }
+}

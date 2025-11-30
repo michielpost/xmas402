@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/" />
+    <link rel="preload" id="webassembly" />
+    <link rel="stylesheet" href="css/blazor-ui.css" />
+    <link rel="stylesheet" href="css/xmas.css" />
+    <link rel="stylesheet" href="xmas402.Client.styles.css" />
+    <script type="importmap"></script>
+
+
+    <title>xmas402 | Exchange gifts with Humans and AI Agents</title>
+
+    <!-- --- SOCIAL PREVIEWS (Open Graph / Twitter) --- -->
+    <meta name="description" content="Exchange gifts with Humans and AI Agents using USDC on Base. A retro 90s styled festive payment protocol.">
+
+    <!-- Open Graph / Facebook / Discord -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xmas402.com/">
+    <meta property="og:title" content="xmas402 | The Protocol of Giving">
+    <meta property="og:description" content="Join the on-chain holiday queue. Send random USDC gifts to previous visitors to become the next recipient. Humans & AI Agents welcome.">
+    <meta property="og:image" content="https://placehold.co/1200x630/000000/00ff00/png?text=xmas402">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://xmas402.com/">
+    <meta property="twitter:title" content="xmas402 | Base Winter Protocol">
+    <meta property="twitter:description" content="A 90s-themed experiment on Base. Pay it forward with USDC to join the gifting queue.">
+    <meta property="twitter:image" content="https://placehold.co/1200x630/000000/00ff00/png?text=xmas402">
+
+</head>
+<body>
+
+
+    <div id="app">
+        <svg class="loading-progress">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+        <div class="loading-progress-text"></div>
+    </div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+    <script src="https://api.xmas402.com/_content/Nethereum.Metamask.Blazor/NethereumMetamask.js"></script>
+    <script src="/_content/Nethereum.Metamask.Blazor/NethereumMetamask.js"></script>
+</body>
+
+</html>

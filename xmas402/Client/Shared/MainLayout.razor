@@ -1,0 +1,11 @@
+@inherits LayoutComponentBase
+<ErrorBoundary>
+	<ChildContent>
+		<div class="content">
+			@Body
+		</div>
+	</ChildContent>
+	<ErrorContent Context="ex">
+		<div class="blazor-error-boundary">@ex.Message</div>
+	</ErrorContent>
+</ErrorBoundary>

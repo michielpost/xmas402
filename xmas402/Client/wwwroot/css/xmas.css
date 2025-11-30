@@ -1,0 +1,430 @@
+/* --- 90s RETRO STYLING --- */
+body {
+    background-color: #000000;
+    color: #00ff00;
+    font-family: 'Courier New', Courier, monospace;
+    margin: 0;
+    padding: 0;
+    background-image: linear-gradient(#0a0a0a 1px, transparent 1px), linear-gradient(90deg, #0a0a0a 1px, transparent 1px);
+    background-size: 20px 20px;
+    overflow-x: hidden;
+}
+
+    /* Scanline effect */
+    body::after {
+        content: " ";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+        z-index: 2;
+        background-size: 100% 2px, 3px 100%;
+        pointer-events: none;
+    }
+
+a {
+    color: #ffff00;
+    text-decoration: underline;
+}
+
+    a:hover {
+        color: #ff0000;
+        background-color: #ffff00;
+    }
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 3;
+    border-left: 2px solid #333;
+    border-right: 2px solid #333;
+    background-color: #050505;
+    min-height: 100vh;
+}
+
+/* --- MARQUEE --- */
+.marquee-container {
+    background-color: #000080;
+    color: white;
+    border: 2px solid #ffffff;
+    margin-bottom: 20px;
+    padding: 5px;
+    font-weight: bold;
+}
+
+/* --- HERO SECTION --- */
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-top: 20px;
+}
+
+/* LOGO STYLES */
+h1 {
+    font-family: 'Impact', 'Arial Black', 'Courier New', monospace;
+    font-size: 4.5rem;
+    margin: 0;
+    letter-spacing: 2px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    text-shadow: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff, 5px 5px 0 #000080;
+}
+
+.logo-xmas {
+    color: #008000;
+}
+
+.logo-402 {
+    color: #ff0000;
+}
+
+.subtitle {
+    color: #ff00ff;
+    font-size: 1.2rem;
+    margin-top: 15px;
+    font-weight: bold;
+    text-shadow: 1px 1px #000;
+}
+
+.content-split {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* --- PIXEL ART TREE --- */
+.tree-container {
+    background-color: #000;
+    border: 4px inset #555;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    min-width: 300px;
+    position: relative;
+}
+
+.pixel-tree {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.row {
+    display: flex;
+}
+
+.pixel {
+    width: 20px;
+    height: 20px;
+}
+
+/* Green pixels - Easter Egg Cursor */
+.g {
+    background-color: #008000;
+    border: 1px solid #004d00;
+    cursor: crosshair; /* Hint at interaction */
+}
+
+    .g:hover {
+        border-color: #00ff00; /* Subtle highlight */
+    }
+
+.w {
+    background-color: #5c3a21;
+    border: 1px solid #3e2614;
+}
+
+.s {
+    background-color: #ffff00;
+    animation: star-twinkle 1s infinite alternate;
+}
+
+/* Lights */
+.l {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #333;
+    animation: blink 1s infinite;
+}
+
+.r {
+    background-color: #ff0000;
+    animation-delay: 0.2s;
+}
+
+.b {
+    background-color: #0000ff;
+    animation-delay: 0.5s;
+}
+
+.y {
+    background-color: #ffff00;
+    animation-delay: 0.8s;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 5px currentColor;
+    }
+
+    50% {
+        opacity: 0.3;
+        box-shadow: none;
+    }
+}
+
+@keyframes star-twinkle {
+    from {
+        box-shadow: 0 0 5px gold;
+    }
+
+    to {
+        box-shadow: 0 0 20px gold;
+    }
+}
+
+/* --- INTERACTION BOX --- */
+.interaction-box {
+    flex: 1;
+    min-width: 300px;
+    border: 4px outset #ccc;
+    background-color: #c0c0c0;
+    color: black;
+    padding: 15px;
+    font-family: 'Verdana', sans-serif;
+}
+
+    .interaction-box h2 {
+        margin-top: 0;
+        background-color: #000080;
+        color: white;
+        padding: 5px;
+        font-size: 1rem;
+    }
+
+.status-panel {
+    background: #fff;
+    border: 2px inset #fff;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.btn-90s {
+    background-color: #c0c0c0;
+    border: 2px outset #fff;
+    border-right-color: #404040;
+    border-bottom-color: #404040;
+    padding: 10px 15px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+}
+
+    .btn-90s:active {
+        border: 2px inset #fff;
+    }
+
+input, select {
+    border: 2px inset #ccc;
+    padding: 5px;
+    font-family: 'Courier New', Courier, monospace;
+    width: 90%;
+    background-color: #eee;
+}
+
+.helper-text {
+    font-size: 0.75rem;
+    color: #555;
+    margin-top: 5px;
+    line-height: 1.2;
+}
+
+/* --- AI AGENT BLOCK --- */
+.ai-agent-block {
+    margin-top: 40px;
+    border: 2px solid #00ff00;
+    background-color: #051a05;
+    padding: 15px;
+    font-family: 'Courier New', Courier, monospace;
+    color: #00ff00;
+    position: relative;
+}
+
+    .ai-agent-block h3 {
+        margin: 0 0 10px 0;
+        font-size: 1rem;
+        border-bottom: 1px dashed #00ff00;
+        padding-bottom: 5px;
+        text-transform: uppercase;
+    }
+
+.ai-terminal {
+    background-color: #000;
+    border: 1px solid #333;
+    padding: 15px;
+    font-size: 0.8rem;
+    overflow-x: auto;
+}
+
+.comment {
+    color: #00aa00;
+    font-style: italic;
+}
+
+.method {
+    color: #ffff00;
+}
+
+.url {
+    color: #00ffff;
+    text-decoration: underline;
+}
+
+.key {
+    color: #ff00ff;
+}
+
+.ai-blink {
+    animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* --- BELOW FOLD: GIFTS --- */
+.gift-log {
+    margin-top: 50px;
+    border-top: 2px dashed #00ff00;
+    padding-top: 20px;
+}
+
+/* New Airdrop Notice Box */
+.airdrop-notice {
+    border: 1px dotted #ffff00;
+    background-color: #111;
+    color: #ffff00;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.8rem;
+    margin-bottom: 15px;
+    animation: border-pulse 2s infinite;
+}
+
+@keyframes border-pulse {
+    0% {
+        border-color: #ffff00;
+    }
+
+    50% {
+        border-color: #ff0000;
+    }
+
+    100% {
+        border-color: #ffff00;
+    }
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    background-color: #000;
+    border: 1px solid #00ff00;
+}
+
+th, td {
+    border: 1px solid #00ff00;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #003300;
+    color: #ffff00;
+}
+
+/* --- PRESENTS UNDER TREE --- */
+.presents-pile {
+    margin-top: -10px;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.pixel-gift {
+    width: 30px;
+    height: 30px;
+    background-color: red;
+    border: 2px solid white;
+    position: relative;
+    cursor: help;
+}
+
+    .pixel-gift::before {
+        content: '';
+        position: absolute;
+        width: 6px;
+        height: 100%;
+        background: gold;
+        left: 10px;
+    }
+
+    .pixel-gift::after {
+        content: '';
+        position: absolute;
+        height: 6px;
+        width: 100%;
+        background: gold;
+        top: 10px;
+    }
+
+    .pixel-gift:hover {
+        transform: translateY(-2px);
+    }
+
+footer {
+    margin-top: 50px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #888;
+    border-top: 1px solid #333;
+    padding-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* Snow */
+.snowflake {
+    position: fixed;
+    top: -10px;
+    color: white;
+    z-index: 10;
+    user-select: none;
+    pointer-events: none;
+}
+
+.blink-text {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
