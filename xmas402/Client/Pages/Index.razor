@@ -8,8 +8,8 @@
 @using xmas402.Shared.Models
 @inherits BaseMetaMaskPage
 @inject IHttpClientFactory ClientFactory
-@inject IAssetInfoProvider AssetInfoProvider
 @inject IGiftInfoGrpcService GiftInfoGrpcService
+@inject ILogger<Index> Logger
 @page "/"
 
     <div class="marquee-container">
@@ -355,6 +355,8 @@
         await base.OnInitializedAsync();
 
         await LoadGiftsAsync();
+
+        Logger.LogInformation("Page initialized and gifts loaded.");
     }
 
     public async Task ReloadAsync()
@@ -384,50 +386,10 @@
 
     private async Task Submit()
     {
-        isSubmitting = true;
         try
         {
+            isSubmitting = true;
             Result = "";
-
-            if (_ethereumHostProvider == null)
-                return;
-
-            var web3 = await _ethereumHostProvider.GetWeb3Async();
-            var chainId = new HexBigInteger(8453);
-            var assetInfo = AssetInfoProvider.GetAll().Where(x => x.ChainId == 8453).FirstOrDefault();
-
-
-            var changeIdResult = await ChangeChainTo(8453);
-            Console.WriteLine(changeIdResult);
-            Result = "Changed chainId";
-
-            if (!string.IsNullOrWhiteSpace(changeIdResult))
-            {
-                await AddBaseMainnetAsync();
-                Result = "Added chainId";
-
-                changeIdResult = await ChangeChainTo(8453);
-                Result = "Changed chainId";
-            }
-
-            var selectedChainId = await web3.Eth.ChainId.SendRequestAsync();
-            if (selectedChainId.Value != chainId.Value)
-            {
-                Result = "Failed to change chainId";
-                return;
-            }
-
-            if (SelectedAccount == null)
-            {
-                Result = "No account selected";
-                return;
-            }
-
-            var wallet = new EVMWallet((s) => web3.Eth.AccountSigning.SignTypedDataV4.SendRequestAsync(s), SelectedAccount, assetInfo?.Network ?? string.Empty, (ulong)chainId.Value)
-            {
-                IgnoreAllowances = true
-            };
-            WalletProvider.Wallet = wallet;
 
             var request = new HttpRequestMessage(HttpMethod.Get, $"/gift/send-gift?gift={SelectedGift}");
 
