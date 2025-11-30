@@ -42,8 +42,8 @@ public class GiftController(ApplicationDbContext dbContext,
 
             var payReq = new PaymentRequirementsBasic
             {
-                Asset = "0x036CbD53842c5426634e7929541eC2318f3dCF7e", //Testnet
-                //Asset = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", //Mainnet
+                //Asset = "0x036CbD53842c5426634e7929541eC2318f3dCF7e", //Testnet
+                Asset = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", //Mainnet
                 Amount = lastGift.NextValue,
                 PayTo = lastGift.From,
             };
