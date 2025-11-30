@@ -11,4 +11,4 @@ This project uses dotnet and EF Core with SQLite
 ### Migrations
 Run in the root directory:
 ```
-dotnet ef --startup-project xmas402/Server --project x402dev.Database migrations add 
+dotnet ef --startup-project xmas402/Server --project xmas402.Database migrations add 
