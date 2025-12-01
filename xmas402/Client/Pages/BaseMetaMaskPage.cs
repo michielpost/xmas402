@@ -32,6 +32,8 @@ public class BaseMetaMaskPage : ComponentBase, IDisposable
     protected long SelectedChainId { get; set; }
     protected IEthereumHostProvider? _ethereumHostProvider;
 
+    public string Progress { get; set; } = string.Empty;
+
     protected override void OnInitialized()
     {
         Console.WriteLine("OnInitialized??");
@@ -43,6 +45,8 @@ public class BaseMetaMaskPage : ComponentBase, IDisposable
             _ethereumHostProvider.SelectedAccountChanged += HostProvider_SelectedAccountChanged;
 
             WalletProvider.PrepareWallet += WalletProvider_PrepareWallet;
+            WalletProvider.PaymentSelected += WalletProvider_PaymentSelected;
+            WalletProvider.HeaderCreated += WalletProvider_HeaderCreated;
         }
     }
 
@@ -53,6 +57,8 @@ public class BaseMetaMaskPage : ComponentBase, IDisposable
             _ethereumHostProvider.SelectedAccountChanged -= HostProvider_SelectedAccountChanged;
 
             WalletProvider.PrepareWallet -= WalletProvider_PrepareWallet;
+            WalletProvider.PaymentSelected -= WalletProvider_PaymentSelected;
+            WalletProvider.HeaderCreated -= WalletProvider_HeaderCreated;
         }
     }
 
@@ -69,13 +75,9 @@ public class BaseMetaMaskPage : ComponentBase, IDisposable
                 }
             }
 
-            Console.WriteLine("OK??");
-
-
             var authState = await AuthenticationState;
             if (authState != null)
             {
-                Console.WriteLine("It's here");
                 UserName = authState.User.FindFirst(c => c.Type.Contains(ClaimTypes.NameIdentifier))?.Value;
             }
         }
@@ -89,20 +91,38 @@ public class BaseMetaMaskPage : ComponentBase, IDisposable
 
     private async Task<bool> WalletProvider_PrepareWallet(object? sender, PrepareWalletEventArgs<PaymentRequiredResponse> eventArgs)
     {
+        SetProgress("Preparing wallet for x402 payment requirements");
+
         var networks = eventArgs.PaymentRequiredResponse.Accepts.Select(x => x.Network).Distinct();
+
+        if (networks.Count() > 1)
+        {
+            SetProgress($"Received x402 requirements for these networks: {string.Join(", ", networks)}");
+        }
+        else
+        {
+            SetProgress($"Received x402 requirements for network: {string.Join(", ", networks)}");
+        }
 
         var network = networks.First();
 
         //Get known assets
         var assetInfo = AssetInfoProvider.GetAssetInfoByNetwork(network);
-        if (assetInfo == null)
+        if (assetInfo != null)
         {
+            SetProgress($"Known network: {assetInfo.Network} ({assetInfo.ChainId})");
+        }
+        else
+        {
+            SetProgress($"Unknown network: {network}");
             return false;
         }
 
 
         if (_ethereumHostProvider == null)
         {
+            SetProgress($"Enable MetaMask to proceed.");
+
             return false;
         }
 
@@ -113,17 +133,25 @@ public class BaseMetaMaskPage : ComponentBase, IDisposable
         var changeResult = await ChangeChainTo(assetInfo.ChainId);
         if (!string.IsNullOrEmpty(changeResult))
         {
+            SetProgress($"Error changing MetaMask to ChainId: {assetInfo.ChainId}: {changeResult}");
             return false;
+        }
+        else
+        {
+            SetProgress($"Changed MetaMask to ChainId: {assetInfo.ChainId}");
         }
 
         var selectedChainId = await web3.Eth.ChainId.SendRequestAsync();
         if (selectedChainId.Value != chainId.Value)
         {
+            SetProgress($"Failed to change chainId. Need: {chainId.Value}, current: {selectedChainId}");
             return false;
         }
 
+
         if (SelectedAccount == null)
         {
+            SetProgress("No account selected in MetaMask");
             return false;
         }
 
@@ -134,6 +162,30 @@ public class BaseMetaMaskPage : ComponentBase, IDisposable
         WalletProvider.Wallet = wallet;
 
         return true;
+    }
+
+    private void WalletProvider_PaymentSelected(object? sender, PaymentSelectedEventArgs<PaymentRequirements> eventArgs)
+    {
+        if (eventArgs.PaymentRequirements == null)
+        {
+            SetProgress("No payment selected");
+        }
+        else
+        {
+            SetProgress($"Payment selected: {eventArgs.PaymentRequirements.MaxAmountRequired} {eventArgs.PaymentRequirements.Asset} on {eventArgs.PaymentRequirements.Network}");
+        }
+    }
+
+    private void WalletProvider_HeaderCreated(object? sender, HeaderCreatedEventArgs<PaymentPayloadHeader> eventArgs)
+    {
+        SetProgress("Requesting with x402 header...");
+        //SetProgress($"Payload: {eventArgs.PaymentPayloadHeader.ToBase64Header()}");
+    }
+
+    private void SetProgress(string msg)
+    {
+        Progress = msg;
+        StateHasChanged();
     }
 
     protected async Task<string> ChangeChainTo(ulong chainId)

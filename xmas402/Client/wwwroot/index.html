@@ -45,9 +45,20 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-    <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
-    <script src="https://api.xmas402.com/_content/Nethereum.Metamask.Blazor/NethereumMetamask.js"></script>
-    <script src="/_content/Nethereum.Metamask.Blazor/NethereumMetamask.js"></script>
+    <!--<script src="/_content/Nethereum.Metamask.Blazor/NethereumMetamask.js"></script>-->
+    <script defer src="https://api.xmas402.com/_content/Nethereum.Metamask.Blazor/NethereumMetamask.js"></script>
+    <script src="_framework/blazor.webassembly#[.{fingerprint}].js" autostart="false"></script>
+
+    <script>
+        function startBlazor() {
+            if (typeof NethereumMetamaskInterop !== 'undefined' && typeof Blazor !== 'undefined') {
+                Blazor.start();
+            } else {
+                setTimeout(startBlazor, 50);
+            }
+        }
+        startBlazor();
+    </script>
 </body>
 
 </html>

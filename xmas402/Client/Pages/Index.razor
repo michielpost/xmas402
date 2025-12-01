@@ -120,7 +120,20 @@
                     }
 
                 </div>
-                <p id="tx-message" style="color: red; font-weight: bold; font-size: 0.8rem; min-height: 1rem; margin-top:5px;">@Result</p>
+            @if (tx != null)
+            {
+                <p id="tx-message" style="color: green; font-weight: bold; font-size: 0.8rem; min-height: 1rem; margin-top:5px;">Sucess! <a href="https://basescan.org/tx/@tx" target="_blank">View TX</a>
+                <br />
+                You are next in line to receive a gift.
+                </p>
+            }
+            else if (Progress != string.Empty)
+            {
+                <p id="tx-message" style="color: red; font-weight: bold; font-size: 0.8rem; min-height: 1rem; margin-top:5px;">
+                    Procesing gift... <br />
+                    @Progress
+                    </p>
+            }
             </div>
         </div>
 
@@ -216,7 +229,6 @@
         setupEasterEgg();
     }
 
-    // --- EASTER EGG LOGIC ---
     function setupEasterEgg() {
         const tree = document.getElementById('interactiveTree');
         tree.addEventListener('click', (e) => {
@@ -235,64 +247,6 @@
             }
         });
     }
-
-
-    // function processTransaction() {
-    //     const btn = document.querySelector('button');
-    //     //const msg = document.getElementById('tx-message');
-    //     const giftInput = document.getElementById('giftMsg');
-
-    //     // Generate a fake user address for the visitor if they don't have one
-    //     if(!userAddress) userAddress = generateAddress();
-
-    //     btn.disabled = true;
-    //     btn.innerText = "CONFIRMING ON BASE...";
-    //     msg.innerText = "Interacting with Smart Contract...";
-
-    //     // Simulate Network Delay
-    //     setTimeout(() => {
-    //         msg.innerText = "Mining Transaction...";
-
-    //         setTimeout(() => {
-    //             // Success logic
-    //             const now = new Date();
-    //             const timeStr = now.getHours() + ':' + (now.getMinutes()<10?'0':'') + now.getMinutes();
-
-    //             // GENERATE RANDOM AMOUNT ($1.00 - $3.00)
-    //             const randomVal = (Math.random() * 2 + 1).toFixed(2);
-
-    //             // Add to ledger
-    //             const newTx = {
-    //                 time: timeStr,
-    //                 from: userAddress + " (YOU)",
-    //                 to: currentRecipient,
-    //                 gift: giftInput.value,
-    //                 amt: randomVal + ' USDC'
-    //             };
-
-    //             ledgerData.unshift(newTx); // Add to top
-
-    //             // Add visual gift under tree
-    //             addGiftUnderTree();
-
-    //             // Update State
-    //             alert("PAYMENT SUCCESSFUL! You sent " + randomVal + " USDC to " + currentRecipient);
-
-    //             // User becomes the recipient
-    //             currentRecipient = userAddress + " (YOU)";
-    //             document.getElementById('currentRecipient').innerText = currentRecipient;
-    //             document.getElementById('currentRecipient').style.color = 'red';
-    //             document.getElementById('currentRecipient').classList.add('blink-text');
-
-    //             msg.innerText = "You are now next in line to receive USDC gifts!";
-    //             msg.style.color = "#008000";
-
-    //             btn.disabled = false;
-    //             btn.innerText = "SEND ANOTHER GIFT";
-
-    //         }, 2000);
-    //     }, 1000);
-    // }
 
     function addGiftUnderTree() {
         const pile = document.getElementById('presentsPile');
@@ -347,8 +301,7 @@
     private string? errorMessage;
     private bool isSubmitting = false;
     private string SelectedGift { get; set; } = "Digital Cookie";
-
-    string? Result { get; set; }
+    private string? tx;
 
     protected override async Task OnInitializedAsync()
     {
@@ -389,14 +342,16 @@
         try
         {
             isSubmitting = true;
-            Result = "";
+            tx = null;
+            Progress = "Requesting to give a gift...";
 
             var request = new HttpRequestMessage(HttpMethod.Get, $"/gift/send-gift?gift={SelectedGift}");
 
             var httpClient = ClientFactory.CreateClient("xmas402");
             var response = await httpClient.SendAsync(request);
 
-            Result = await response.Content.ReadAsStringAsync();
+            string result = await response.Content.ReadAsStringAsync();
+            Progress = "Received result";
 
             if (response.IsSuccessStatusCode)
             {
@@ -406,17 +361,22 @@
 
                 if (paymentResponse != null && paymentResponse.Success)
                 {
-                    Result = $"Success! Tx: {paymentResponse.Transaction}";
+                    Progress = $"Thanks for your gift!";
+                    tx = paymentResponse.Transaction;
                 }
 
                 // Reload the list
                 gifts = await GiftInfoGrpcService.GetGifts();
                 lastGift = await GiftInfoGrpcService.GetLastGift();
             }
+            else
+            {
+                Progress = "Failed to give a gift. Please try again.";
+            }
         }
         catch (Exception ex)
         {
-            Result = $"Error: {ex}";
+            Progress = $"Error: {ex}";
         }
         finally
         {
