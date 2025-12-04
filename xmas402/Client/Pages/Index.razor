@@ -284,8 +284,10 @@
         }, 200);
     }
 
-    // Run
-    init();
+    // Run after DOM is ready
+    setTimeout(() => {
+        init();
+    }, 100);
 
 </script>
 
