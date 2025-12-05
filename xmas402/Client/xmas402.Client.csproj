@@ -8,7 +8,9 @@
 		<OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
 		<InvariantTimezone>false</InvariantTimezone>
 		<InvariantGlobalization>true</InvariantGlobalization>
-		<BlazorWebAssemblyEnablePrerendering>true</BlazorWebAssemblyEnablePrerendering>
+		<PublishTrimmed>true</PublishTrimmed>
+		<TrimMode>full</TrimMode>
+		<BlazorWebAssemblyEnablePrerendering>false</BlazorWebAssemblyEnablePrerendering>
 		<BlazorWasmPrerenderingDeleteLoadingContents>true</BlazorWasmPrerenderingDeleteLoadingContents>
 	</PropertyGroup>
 
@@ -21,7 +23,6 @@
 		<PackageReference Include="Grpc.Net.Client.Web" Version="2.71.0" />
 		<PackageReference Include="System.ServiceModel.Primitives" Version="10.0.652802" />
 		<PackageReference Include="x402.Client.EVM" Version="0.0.16" />
-		<PackageReference Include="x402.Core" Version="0.0.16" />
 		<PackageReference Include="Nethereum.Metamask.Blazor" Version="5.0.0" />
 		<PackageReference Include="Nethereum.UI" Version="5.0.0" />
 		<PackageReference Include="BlazorWasmPreRendering.Build" Version="7.0.0" />
