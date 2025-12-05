@@ -107,7 +107,8 @@ public class BaseMetaMaskPage : ComponentBase, IDisposable
         var network = networks.First();
 
         //Get known assets
-        var assetInfo = AssetInfoProvider.GetAssetInfoByNetwork(network);
+        var assetInfos = AssetInfoProvider.GetAssetInfoByNetwork(network);
+        var assetInfo = assetInfos.FirstOrDefault();
         if (assetInfo != null)
         {
             SetProgress($"Known network: {assetInfo.Network} ({assetInfo.ChainId})");

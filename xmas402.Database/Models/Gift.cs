@@ -29,5 +29,8 @@ namespace xmas402.Database.Models
         public string? GiftType { get; set; }
 
         public required DateTimeOffset CreatedDateTime { get; set; }
+
+        [MaxLength(16)]
+        public string? Ip { get; set; }
     }
 }
