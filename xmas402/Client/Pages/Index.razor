@@ -12,124 +12,132 @@
 @inject ILogger<Index> Logger
 @page "/"
 
-    <div class="marquee-container">
-        <marquee scrollamount="5" scrolldelay="100">
-            *** WELCOME TO XMAS402 *** THE HTTP 402 PAYMENT REQUIRED PROTOCOL FOR CHRISTMAS *** USDC ON BASE *** GIFTS ARE RANDOM $1-$3 ***
-        </marquee>
-    </div>
+<div class="marquee-container">
+    <marquee scrollamount="5" scrolldelay="100">
+        *** WELCOME TO XMAS402 *** THE HTTP 402 PAYMENT REQUIRED PROTOCOL FOR CHRISTMAS *** USDC ON BASE *** GIFTS ARE RANDOM $1-$3 ***
+    </marquee>
+</div>
 
-    <div class="container">
+<div class="container">
 
-        <header>
-            <h1><span class="logo-xmas">xmas</span><span class="logo-402">402</span></h1>
+    <header>
+        <h1><span class="logo-xmas">xmas</span><span class="logo-402">402</span></h1>
 
-            <div class="subtitle">Payment Required to Celebrate</div>
-            <p>Connecting Humans and AI Agents via USDC on Base.</p>
-            <p style="font-size: 0.9rem; margin-top: 10px;">
-                <b>What is this?</b> Make a small payment using x402 and you will receive a payment from the next person. Even better? You can win prizes!
-            </p>
-            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3d4bWh3ZWF0aDN4bWh3ZWF0aDN4bWh3ZWF0aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/LpW319tq3r6XN61c6X/giphy.gif" style="height: 4px; width: 100%; object-fit: cover; margin-top:20px;" alt="divider">
-        </header>
+        <div class="subtitle">Payment Required to Celebrate</div>
+        <p>Connecting Humans and AI Agents via USDC on Base.</p>
+        <p style="font-size: 0.9rem; margin-top: 10px;">
+            Make a small payment using x402 and you will receive a payment from the next person. Even better? You can win prizes!
+        </p>
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3d4bWh3ZWF0aDN4bWh3ZWF0aDN4bWh3ZWF0aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/LpW319tq3r6XN61c6X/giphy.gif" style="height: 4px; width: 100%; object-fit: cover; margin-top:20px;" alt="divider">
+    </header>
 
-        <div class="content-split">
+    <div class="content-split">
 
-            <!-- LEFT: TREE (Compact Height) -->
-            <div class="tree-container">
-                <div class="pixel-tree" id="interactiveTree">
-                    <!-- Star -->
-                    <div class="row"><div class="pixel s"></div></div>
-                    <!-- Layer 1 -->
-                    <div class="row"><div class="pixel g"></div></div>
-                    <div class="row"><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div></div>
-                    <!-- Layer 2 -->
-                    <div class="row"><div class="pixel g"></div><div class="pixel l r"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div></div>
-                    <div class="row"><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div></div>
-                    <!-- Layer 3 -->
-                    <div class="row"><div class="pixel g"></div><div class="pixel g"></div><div class="pixel l b"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel l y"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div></div>
-                    <div class="row"><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div></div>
-                    <!-- Trunk -->
-                    <div class="row"><div class="pixel w"></div><div class="pixel w"></div><div class="pixel w"></div></div>
-                    <div class="row"><div class="pixel w"></div><div class="pixel w"></div><div class="pixel w"></div></div>
+        <!-- LEFT: TREE (Compact Height) -->
+        <div class="tree-container">
+            <div class="pixel-tree" id="interactiveTree">
+                <!-- Star -->
+                <div class="row"><div class="pixel s"></div></div>
+                <!-- Layer 1 -->
+                <div class="row"><div class="pixel g"></div></div>
+                <div class="row"><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div></div>
+                <!-- Layer 2 -->
+                <div class="row"><div class="pixel g"></div><div class="pixel l r"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div></div>
+                <div class="row"><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div></div>
+                <!-- Layer 3 -->
+                <div class="row"><div class="pixel g"></div><div class="pixel g"></div><div class="pixel l b"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel l y"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div></div>
+                <div class="row"><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div><div class="pixel g"></div></div>
+                <!-- Trunk -->
+                <div class="row"><div class="pixel w"></div><div class="pixel w"></div><div class="pixel w"></div></div>
+                <div class="row"><div class="pixel w"></div><div class="pixel w"></div><div class="pixel w"></div></div>
 
-                    <!-- Presents Visual -->
-                    <div class="presents-pile" id="presentsPile">
-                        <!-- Presents added via JS -->
-                        <div class="pixel-gift" style="background-color: blue;"></div>
-                        <div class="pixel-gift" style="background-color: purple;"></div>
-                    </div>
+                <!-- Presents Visual -->
+                <div class="presents-pile" id="presentsPile">
+                    <!-- Presents added via JS -->
+                    <div class="pixel-gift" style="background-color: blue;"></div>
+                    <div class="pixel-gift" style="background-color: purple;"></div>
                 </div>
-
-             
             </div>
 
-            <!-- RIGHT: PROTOCOL INTERFACE -->
-            <div class="interaction-box">
-                <h2><span class="blink-text">></span> BASE TERMINAL</h2>
-                <p style="font-size: 0.8rem; margin-bottom: 15px;">
-                    <b>Protocol Rules:</b><br>
-                    1. Send USDC (Base) to the user before you.<br>
-                    2. Amount is random ($1-$3).<br>
-                    3. Join the queue to receive gifts.
-                </p>
 
-                <div class="status-panel">
-                    <div><b>Current Recipient:</b></div>
-                    @if (lastGift != null)
-                    {
-                        <div id="currentRecipient" style="color: blue;">@TruncateAddress(lastGift.From)</div>
-                    }
-                    else
-                    {
-                        <div id="currentRecipient" style="color: blue;">0x.. (AI Agent)</div>
-                    }
-                    <hr>
-                    <div><b>Status:</b> <span style="color:green">Awaiting Payment</span></div>
+        </div>
+
+        <!-- RIGHT: PROTOCOL INTERFACE -->
+        <div class="interaction-box">
+            <h2><span class="blink-text">></span> BASE TERMINAL</h2>
+            <p style="font-size: 0.8rem; margin-bottom: 15px;">
+                <b>Protocol Rules:</b><br>
+                1. Send USDC (Base) to the user before you.<br>
+                2. Amount is random ($1-$3).<br>
+                3. Join the queue to receive gifts.
+            </p>
+
+            <div class="status-panel">
+                <div><b>Current Recipient:</b></div>
+                @if (lastGift != null)
+                {
+                    <div id="currentRecipient" style="color: blue;">@TruncateAddress(lastGift.From)</div>
+                }
+                else
+                {
+                    <div id="currentRecipient" style="color: blue;">0x.. (AI Agent)</div>
+                }
+                <hr>
+                <div><b>Status:</b> <span style="color:green">Awaiting Payment</span></div>
+            </div>
+
+            <div style="background: #ddd; padding: 10px; border: 2px inset white;">
+                <label for="amount">Estimated Cost:</label><br>
+                <!-- Readonly Input -->
+                @if (lastGift != null)
+                {
+                    <input type="text" id="amount" value="$@ConvertUsdcNativeToDecimalString(lastGift.NextValue) USDC" readonly style="font-weight: bold; color: #555;">
+                }
+                else
+                {
+                    <input type="text" id="amount" value="$1.00 - $3.00 USDC" readonly style="font-weight: bold; color: #555;">
+                }
+                <div class="helper-text">
+                    * Exact amount determined on payment.<br>
+                    * All gifts are random between 1 and 3 USDC.
                 </div>
 
-                <div style="background: #ddd; padding: 10px; border: 2px inset white;">
-                    <label for="amount">Estimated Cost:</label><br>
-                    <!-- Readonly Input -->
-                    @if (lastGift != null)
-                    {
-                        <input type="text" id="amount" value="$@ConvertUsdcNativeToDecimalString(lastGift.NextValue) USDC" readonly style="font-weight: bold; color: #555;">
-                    }
-                    else
-                    {
-                        <input type="text" id="amount" value="$1.00 - $3.00 USDC" readonly style="font-weight: bold; color: #555;">
-                    }
-                    <div class="helper-text">
-                        * Exact amount determined on payment.<br>
-                        * All gifts are random between 1 and 3 USDC.
-                    </div>
+                <br>
+                <label for="giftMsg">Gift Type:</label><br>
+                <select id="giftMsg" @bind="SelectedGift">
+                    <option>Digital Cookie</option>
+                    <option>GPU Cycles</option>
+                    <option>8-bit Love</option>
+                    <option>Fruitcake</option>
+                    <option>Minted NFT</option>
+                </select>
+                <br><br>
 
-                    <br>
-                    <label for="giftMsg">Gift Type:</label><br>
-                    <select id="giftMsg" @bind="SelectedGift">
-                        <option>Digital Cookie</option>
-                        <option>GPU Cycles</option>
-                        <option>8-bit Love</option>
-                        <option>Fruitcake</option>
-                        <option>Minted NFT</option>
-                    </select>
-                    <br><br>
+                <Metamask SelectedAccountTruncateLength="15" ConnectText="Please Connect" InstallMetamaskText="Please install Metamask" />
 
-                    <Metamask SelectedAccountTruncateLength="15" ConnectText="Please Connect" InstallMetamaskText="Please install Metamask" />
-
-                    @if (!string.IsNullOrEmpty(SelectedAccount))
+                @if (!string.IsNullOrEmpty(SelectedAccount))
+                {
+                    if (!isSubmitting)
                     {
                         <button class="btn-90s" @onclick="Submit">PAY WITH BASE & JOIN QUEUE</button>
                     }
                     else
                     {
-                        <button class="btn-90s" disabled>Connect with MetaMask to continue</button>
+                        <button class="btn-90s" disabled>PAY WITH BASE & JOIN QUEUE</button>
                     }
+                }
+                else
+                {
+                    <button class="btn-90s" disabled>Connect with MetaMask to continue</button>
+                }
 
-                </div>
+            </div>
             @if (tx != null)
             {
-                <p id="tx-message" style="color: green; font-weight: bold; font-size: 0.8rem; min-height: 1rem; margin-top:5px;">Sucess! <a href="https://basescan.org/tx/@tx" target="_blank">View TX</a>
-                <br />
-                You are next in line to receive a gift.
+                <p id="tx-message" style="color: green; font-weight: bold; font-size: 0.8rem; min-height: 1rem; margin-top:5px;">
+                    Sucess! <a href="https://basescan.org/tx/@tx" target="_blank">View TX</a>
+                    <br />
+                    You are next in line to receive a gift.
                 </p>
             }
             else if (Progress != string.Empty)
@@ -137,94 +145,97 @@
                 <p id="tx-message" style="color: red; font-weight: bold; font-size: 0.8rem; min-height: 1rem; margin-top:5px;">
                     Procesing gift... <br />
                     @Progress
-                    </p>
+                </p>
             }
-            </div>
         </div>
+    </div>
 
     <!-- Prizes Section -->
     <div style="margin-top: 20px; padding: 10px; border: 2px solid #ccc; text-align: center;">
         <h3 style="margin: 0 0 10px 0; font-size: 1rem;">🎁 Prizes 🎁</h3>
-        <p style="margin: 5px 0; font-weight: bold;">4x 10 USDC</p>
+        <p style="margin: 5px 0; font-weight: bold;">10 USDC <span style="font-weight:normal; font-size: 0.75rem;">(random, to one of the first 100 users)</span></p>
+        <p style="margin: 5px 0; font-weight: bold;">10 USDC <span style="font-weight:normal; font-size: 0.75rem;">(random, to one of users 101 - 200)</span></p>
+        <p style="margin: 5px 0; font-weight: bold;">10 USDC <span style="font-weight:normal; font-size: 0.75rem;">(random, to one of users 201 - 300)</span></p>
+        <p style="margin: 5px 0; font-weight: bold;">10 USDC <span style="font-weight:normal; font-size: 0.75rem;">(random, to one of users 300+)</span></p>
         <p style="margin: 5px 0; font-weight: bold;"></p>
         <p style="margin: 5px 0; font-weight: bold;">Prizes will be awarded to randomly selected participants (humans or AI agents). You can enter until the end of 2025 (UTC).</p>
         <p style="margin: 5px 0; font-size: 0.8rem;">Feel free to <a href="https://x.com/michielpostnl" target="_blank">contact me</a> if you’d like to sponsor additional prizes.</p>
     </div>
 
-        <!-- AI AGENT SECTION -->
-        <div class="ai-agent-block">
-            <h3><span class="blink-text">█</span> AI_AGENT_INTERFACE_DETECTED</h3>
-            <p style="font-size: 0.9rem;">
-                Are you an Autonomous Agent? Skip the HTML renderer.<br>
-                Use this x402 endpoint to give and receive a gift programmatically.
-            </p>
+    <!-- AI AGENT SECTION -->
+    <div class="ai-agent-block">
+        <h3><span class="blink-text">█</span> AI_AGENT_INTERFACE_DETECTED</h3>
+        <p style="font-size: 0.9rem;">
+            Are you an Autonomous Agent? Skip the HTML renderer.<br>
+            Use this x402 endpoint to give and receive a gift programmatically.
+        </p>
 
-            <div class="ai-terminal">
-                <span class="comment"># Initialize transaction via Base RPC</span><br>
-                <span class="method">GET</span> <span class="url"><a href="https://api.xmas402.com/gift/send-gift?gift=AICookie" target="_blank">https://api.xmas402.com/gift/send-gift?gift=AICookie</a></span><br>
-            </div>
-            <p style="font-size: 0.7rem; opacity: 0.8; margin-top: 5px;">> LISTENING ON PORT 402 AND  443...</p>
+        <div class="ai-terminal">
+            <span class="comment"># Initialize transaction via Base RPC</span><br>
+            <span class="method">GET</span> <span class="url"><a href="https://api.xmas402.com/gift/send-gift?gift=AICookie" target="_blank">https://api.xmas402.com/gift/send-gift?gift=AICookie</a></span><br>
         </div>
-
-        <!-- BELOW FOLD: LOG -->
-        <div class="gift-log">
-            <center>
-                <h3><img src="https://media.giphy.com/media/jI77q8Mc5yOs5wncJe/giphy.gif" width="30" style="vertical-align:middle"> CHAIN OF GIVING <img src="https://media.giphy.com/media/jI77q8Mc5yOs5wncJe/giphy.gif" width="30" style="vertical-align:middle"></h3>
-
-                <!-- AIRDROP NOTICE -->
-                <div class="airdrop-notice">
-                    WARNING: All participating addresses will be published on this website.<br>
-                    <b>Participating wallets might be eligible for future airdrops.</b>
-                </div>
-
-                <p>Immutable Ledger on Base Blockchain</p>
-            </center>
-
-            @if (gifts == null)
-            {
-                <p>Loading gifts...</p>
-            }
-            else
-            {
-                <table id="ledger">
-                    <thead>
-                        <tr>
-                            <th>TIME</th>
-                            <th>FROM (Giver)</th>
-                            <th>TO (Receiver)</th>
-                            <th>GIFT</th>
-                            <th>AMT (USDC)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var gift in gifts)
-                        {
-                            <tr>
-                                <td>
-                                    <a href="https://basescan.org/tx/@gift.Transaction" target="_blank" rel="nofollow">
-                                        @gift.CreatedDateTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm")
-                                    </a>
-                                </td>
-                                <td>@TruncateAddress(gift.From)</td>
-                                <td>@TruncateAddress(gift.To)</td>
-                                <td>@gift.GiftType</td>
-                                <td>@ConvertUsdcNativeToDecimalString(gift.Value ?? "0") USDC</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-        </div>
-
-        <footer>
-            <p>Built for the Holidays with &lt;3 and HTML.</p>
-            <p>
-                <a href="https://github.com/michielpost/xmas402/" target="_blank">[ GitHub ]</a>
-            </p>
-            <p style="font-size: 10px; color: #444;">xmas402 is a fictional protocol demo. Not real financial advice.</p>
-        </footer>
-
+        <p style="font-size: 0.7rem; opacity: 0.8; margin-top: 5px;">> LISTENING ON PORT 402 AND  443...</p>
     </div>
+
+    <!-- BELOW FOLD: LOG -->
+    <div class="gift-log">
+        <center>
+            <h3><img src="https://media.giphy.com/media/jI77q8Mc5yOs5wncJe/giphy.gif" width="30" style="vertical-align:middle"> CHAIN OF GIVING <img src="https://media.giphy.com/media/jI77q8Mc5yOs5wncJe/giphy.gif" width="30" style="vertical-align:middle"></h3>
+
+            <!-- AIRDROP NOTICE -->
+            <div class="airdrop-notice">
+                WARNING: All participating addresses will be published on this website.<br>
+                <b>Participating wallets might be eligible for future airdrops.</b>
+            </div>
+
+            <p>Immutable Ledger on Base Blockchain</p>
+        </center>
+
+        @if (gifts == null)
+        {
+            <p>Loading gifts...</p>
+        }
+        else
+        {
+            <table id="ledger">
+                <thead>
+                    <tr>
+                        <th>TIME</th>
+                        <th>FROM (Giver)</th>
+                        <th>TO (Receiver)</th>
+                        <th>GIFT</th>
+                        <th>AMT (USDC)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var gift in gifts)
+                    {
+                        <tr>
+                            <td>
+                                <a href="https://basescan.org/tx/@gift.Transaction" target="_blank" rel="nofollow">
+                                    @gift.CreatedDateTime.ToLocalTime().ToString("yyyy-MM-dd HH:mm")
+                                </a>
+                            </td>
+                            <td>@TruncateAddress(gift.From)</td>
+                            <td>@TruncateAddress(gift.To)</td>
+                            <td>@gift.GiftType</td>
+                            <td>@ConvertUsdcNativeToDecimalString(gift.Value ?? "0") USDC</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+
+    <footer>
+        <p>Built for the Holidays with &lt;3 and HTML.</p>
+        <p>
+            <a href="https://github.com/michielpost/xmas402/" target="_blank">[ GitHub ]</a>
+        </p>
+        <p style="font-size: 10px; color: #444;">xmas402 is a fictional protocol demo. Not real financial advice.</p>
+    </footer>
+
+</div>
 
 <script>
     /* --- STATE --- */

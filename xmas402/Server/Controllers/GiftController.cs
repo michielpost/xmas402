@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using x402;
 using x402.Core.Enums;
 using x402.Core.Models;
@@ -39,6 +40,9 @@ public class GiftController(ApplicationDbContext dbContext,
         try
         {
             var lastGift = await giftService.GetLastGift();
+
+            var ip = this.HttpContext.Connection.RemoteIpAddress?.ToString();
+            var shortIp = ip is { Length: > 16 } v ? v[..16] : ip;
 
             var payReq = new PaymentRequirementsBasic
             {
@@ -101,6 +105,7 @@ public class GiftController(ApplicationDbContext dbContext,
                     Transaction = x402Result.SettlementResponse?.Transaction,
                     Value = payReq.Amount,
                     NextValue = (GetRandomAmount() * 1000000).ToString(),
+                    Ip = shortIp
                 };
 
                 dbContext.Gifts.Add(dbGift);
