@@ -59,6 +59,8 @@ public class GiftController(ApplicationDbContext dbContext,
                     Resource = new ResourceInfoBasic
                     {
                         Description = "Give a gift and join the queue to receive a gift",
+                        // Overwrite so that it does not contain the query string
+                        Resource = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host}{HttpContext.Request.Path}".ToLowerInvariant()
                     },
                     Discoverable = true
                 },
