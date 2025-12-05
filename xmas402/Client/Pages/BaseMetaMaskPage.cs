@@ -119,7 +119,6 @@ public class BaseMetaMaskPage : ComponentBase, IDisposable
             return false;
         }
 
-
         if (_ethereumHostProvider == null)
         {
             SetProgress($"Enable MetaMask to proceed.");
