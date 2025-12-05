@@ -9,7 +9,8 @@
 		<InvariantTimezone>false</InvariantTimezone>
 		<InvariantGlobalization>true</InvariantGlobalization>
 		<PublishTrimmed>true</PublishTrimmed>
-		<TrimMode>full</TrimMode>
+		<TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
+		<TrimMode>partial</TrimMode>
 		<BlazorWebAssemblyEnablePrerendering>false</BlazorWebAssemblyEnablePrerendering>
 		<BlazorWasmPrerenderingDeleteLoadingContents>true</BlazorWasmPrerenderingDeleteLoadingContents>
 	</PropertyGroup>
