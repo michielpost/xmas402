@@ -130,8 +130,8 @@ public class GiftController(ApplicationDbContext dbContext,
     {
         var random = new Random();
 
-        // Generate a value between 1.00 and 3.00 with 2 decimals
-        double value = random.NextDouble() * (3.0 - 1.0) + 1.0;
+        // Generate a value between 1.00 and 2.00 with 2 decimals
+        double value = random.NextDouble() * (2.0 - 1.0) + 1.0;
 
         // Round to 2 decimals
         return Math.Round(value, 2);
