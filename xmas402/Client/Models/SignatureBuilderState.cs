@@ -13,8 +13,8 @@
         public string? TokenContractAddress { get; set; } = "0x036CbD53842c5426634e7929541eC2318f3dCF7e";
         public string? PayTo { get; set; } = "0x209693Bc6afc0C5328bA36FaF03C514EF312287C";
         public ulong Amount { get; set; } = 10000;
-        public string? Network { get; set; } = "base-sepolia";
-        public string? Resource { get; set; } = "https://www.x402.org/protected";
+        public string? Network { get; set; }
+        public string? Resource { get; set; }
         public string? Base64Header { get; set; }
         public string? HeaderJson { get; set; }
         public int LineCount { get; set; } = 10;

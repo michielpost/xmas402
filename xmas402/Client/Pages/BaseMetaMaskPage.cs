@@ -6,10 +6,9 @@ using Nethereum.UI;
 using System.Security.Claims;
 using x402.Client.Events;
 using x402.Client.EVM;
-using x402.Client.v1;
-using x402.Core;
+using x402.Client.v2;
 using x402.Core.Interfaces;
-using x402.Core.Models.v1;
+using x402.Core.Models.v2;
 
 namespace xmas402.Client.Pages;
 
@@ -172,7 +171,7 @@ public class BaseMetaMaskPage : ComponentBase, IDisposable
         }
         else
         {
-            SetProgress($"Payment selected: {eventArgs.PaymentRequirements.MaxAmountRequired} {eventArgs.PaymentRequirements.Asset} on {eventArgs.PaymentRequirements.Network}");
+            SetProgress($"Payment selected: {eventArgs.PaymentRequirements.Amount} {eventArgs.PaymentRequirements.Asset} on {eventArgs.PaymentRequirements.Network}");
         }
     }
 

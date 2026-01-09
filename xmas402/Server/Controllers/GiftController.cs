@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using x402;
 using x402.Core.Enums;
 using x402.Core.Models;
-using x402.Core.Models.v1;
+using x402.Core.Models.v2;
 using xmas402.Database;
 using xmas402.Database.Models;
 using xmas402.Services;
@@ -18,7 +17,7 @@ namespace xmas402.Server.Controllers;
 [Route("[controller]")]
 public class GiftController(ApplicationDbContext dbContext,
     GiftService giftService,
-    X402HandlerV1 x402Handler) : ControllerBase
+    X402HandlerV2 x402Handler) : ControllerBase
 {
     private static readonly SemaphoreSlim _lock = new(1, 1);
 

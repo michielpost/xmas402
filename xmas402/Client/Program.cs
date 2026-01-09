@@ -6,7 +6,7 @@ using Nethereum.Blazor;
 using Nethereum.Metamask;
 using Nethereum.Metamask.Blazor;
 using Nethereum.UI;
-using x402.Client.v1;
+using x402.Client.v2;
 using x402.Core;
 using x402.Core.Interfaces;
 using xmas402.Client.Extensions;
@@ -84,7 +84,7 @@ public class Program
         services.AddScoped<SignatureBuilderState>();
 
         services.AddSingleton<IWalletProvider, WalletProvider>();
-        services.AddTransient<PaymentRequiredV1Handler>();
+        services.AddTransient<PaymentRequiredV2Handler>();
 
         services.AddAuthorizationCore();
         services.AddSingleton<IMetamaskInterop, MetamaskBlazorInterop>();
@@ -106,7 +106,7 @@ public class Program
         {
             client.BaseAddress = new Uri(baseAddress);
         })
-        .AddHttpMessageHandler<PaymentRequiredV1Handler>();
+        .AddHttpMessageHandler<PaymentRequiredV2Handler>();
 
         services.AddHttpClient("ServerAPI", client =>
         {
