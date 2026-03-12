@@ -90,9 +90,12 @@ public class GiftController(ApplicationDbContext dbContext,
 
             if (!x402Result.CanContinueRequest)
             {
+
                 var payload = x402Result.PaymentPayload;
                 if (payload != null)
                 {
+                    logger.LogDebug($"Header: {payload.ToBase64Header()}");
+
                     logger.LogError("No matching payment requirements found for payload: " +
                    "Scheme={PayloadScheme}, " +
                    "Network={PayloadNetwork}, " +

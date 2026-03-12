@@ -9,7 +9,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="x402" Version="2.0.0">
+		<PackageReference Include="x402" Version="2.0.1">
 			<TreatAsUsed>true</TreatAsUsed>
 		</PackageReference>
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.4" />
