@@ -17,6 +17,7 @@ namespace xmas402.Server.Controllers;
 [Route("[controller]")]
 public class GiftController(ApplicationDbContext dbContext,
     GiftService giftService,
+    ILogger<GiftController> logger,
     X402HandlerV2 x402Handler) : ControllerBase
 {
     private static readonly SemaphoreSlim _lock = new(1, 1);
@@ -89,6 +90,46 @@ public class GiftController(ApplicationDbContext dbContext,
 
             if (!x402Result.CanContinueRequest)
             {
+                var payload = x402Result.PaymentPayload;
+                if (payload != null)
+                {
+                    logger.LogError("No matching payment requirements found for payload: " +
+                   "Scheme={PayloadScheme}, " +
+                   "Network={PayloadNetwork}, " +
+                   "Amount={Amount}, " +
+                   "Asset={Asset}, " +
+                   "PayTo={PayTo}, " +
+                   "AuthorizationTo={AuthorizationTo}, " +
+                   "AuthorizationValue={AuthorizationValue}",
+                   payload.Accepted.Scheme,
+                   payload.Accepted.Network,
+                   payload.Accepted.Amount,
+                   payload.Accepted.Asset,
+                   payload.Accepted.PayTo,
+                   payload.Payload.Authorization.To,
+                   payload.Payload.Authorization.Value);
+                }
+                else
+                {
+                    logger.LogError("No matching payment requirements found and no payload provided");
+                }
+
+                foreach (var pr in x402Result.PaymentRequirements)
+                {
+                    logger.LogError("Available payment requirement: " +
+                        "Scheme={Scheme}, " +
+                        "Network={Network}, " +
+                        "Amount={Amount}, " +
+                        "Asset={Asset}, " +
+                        "PayTo={PayTo}",
+                        pr.Scheme,
+                        pr.Network,
+                        pr.Amount,
+                        pr.Asset,
+                        pr.PayTo);
+                }
+
+
                 return null;
             }
 
