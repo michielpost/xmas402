@@ -1,18 +1,28 @@
 ﻿using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using ProtoBuf.Grpc.Server;
 using System.Reflection;
 using x402;
 using xmas402.Database;
+using xmas402.Server.Persistence;
 using xmas402.Server.Services;
 using xmas402.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+// Resolve the SQLite file against the content root so the database is always the same file,
+// independent of the directory the process happens to be started from.
+var databaseOptions = SqliteDatabaseOptions.Create(
+    connectionString, builder.Configuration, builder.Environment.ContentRootPath);
+
+builder.Services.AddSingleton(databaseOptions);
+builder.Services.AddScoped<SqliteDatabaseMaintenance>();
+builder.Services.AddHostedService<SqliteDatabaseBackupService>();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseSqlite(databaseOptions.ConnectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // Add services to the container.
@@ -97,19 +107,13 @@ else
     app.UseHsts();
 }
 
-var sqlLiteBuilder = new SqliteConnectionStringBuilder(connectionString);
-var dbPath = Path.GetDirectoryName(sqlLiteBuilder.DataSource);
-if (dbPath != null && !Directory.Exists(dbPath))
+// Verify the database file, restore it from a backup when it is corrupt, apply migrations and take a snapshot.
+// Design-time tooling (dotnet ef) only needs the DbContext, so it must not touch the database file.
+if (!EF.IsDesignTime)
 {
-    Directory.CreateDirectory(dbPath);
-}
-
-// Ensure database is created and apply migrations
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    //db.Database.EnsureCreated();
-    db.Database.Migrate(); // Creates the database if it does not exist and applies any pending migrations
+    await using var scope = app.Services.CreateAsyncScope();
+    var maintenance = scope.ServiceProvider.GetRequiredService<SqliteDatabaseMaintenance>();
+    await maintenance.InitializeAsync();
 }
 
 // Configure the HTTP request pipeline.
